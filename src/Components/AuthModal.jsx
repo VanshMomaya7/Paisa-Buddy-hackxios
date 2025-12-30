@@ -1,22 +1,41 @@
 "use client";
 
-import React, { useState } from "react"; // Added useState
+import React, { useState } from "react";
 import useAuthStore from "../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 const AuthModal = () => {
-  const { isLoginOpen, isSignUpOpen, closeModals, openSignUp, openLogin, loginWithGoogle } = useAuthStore();
-  
-  // Local state for password visibility
+  const { isLoginOpen, isSignUpOpen, closeModals, openSignUp, openLogin, loginWithGoogle, login, signup, loading, error } = useAuthStore();
+  const navigate = useNavigate();
+
+  // Local state
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   if (!isLoginOpen && !isSignUpOpen) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isLoginOpen) {
+      await login(email, password);
+    } else {
+      await signup(email, password);
+    }
+    navigate('/dashboard');
+  };
+
+  const handleGoogleLogin = async () => {
+    await loginWithGoogle();
+    navigate('/dashboard');
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-[#1E3A2F]/20 backdrop-blur-xl transition-opacity" 
-        onClick={closeModals} 
+      <div
+        className="absolute inset-0 bg-[#1E3A2F]/20 backdrop-blur-xl transition-opacity"
+        onClick={closeModals}
       />
 
       {/* Modal Card */}
@@ -35,10 +54,18 @@ const AuthModal = () => {
           </p>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-xs font-medium">
+            {error}
+          </div>
+        )}
+
         {/* Google Login Button */}
-        <button 
-          onClick={loginWithGoogle}
-          className="w-full flex items-center justify-center gap-3 bg-white border border-[#CFE3D8] py-3.5 rounded-2xl font-bold text-sm text-[#1E3A2F] hover:bg-gray-50 transition-all active:scale-95 shadow-sm"
+        <button
+          onClick={handleGoogleLogin}
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-3 bg-white border border-[#CFE3D8] py-3.5 rounded-2xl font-bold text-sm text-[#1E3A2F] hover:bg-gray-50 transition-all active:scale-95 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5" />
           Continue with Google
@@ -51,18 +78,24 @@ const AuthModal = () => {
         </div>
 
         {/* Form Fields */}
-        <div className="space-y-4">
-          <input 
-            type="email" 
-            placeholder="Work Email" 
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Work Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
             className="w-full bg-white border border-[#CFE3D8] px-5 py-3.5 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2F]/10 transition-all"
           />
-          
+
           {/* PASSWORD INPUT WITH EYE BUTTON */}
           <div className="relative w-full">
-            <input 
-              type={showPassword ? "text" : "password"} 
-              placeholder="Password" 
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
               className="w-full bg-white border border-[#CFE3D8] px-5 py-3.5 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2F]/10 transition-all"
             />
             <button
@@ -80,15 +113,19 @@ const AuthModal = () => {
             </button>
           </div>
 
-          <button className="w-full bg-[#1E3A2F] text-white py-4 rounded-2xl font-bold text-sm shadow-lg shadow-emerald-900/20 hover:shadow-emerald-900/30 transition-all active:scale-95">
-            {isLoginOpen ? "Login to Dashboard" : "Create Free Account"}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#1E3A2F] text-white py-4 rounded-2xl font-bold text-sm shadow-lg shadow-emerald-900/20 hover:shadow-emerald-900/30 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Processing..." : (isLoginOpen ? "Login to Dashboard" : "Create Free Account")}
           </button>
-        </div>
+        </form>
 
         <p className="text-center text-xs text-gray-400 mt-8">
           {isLoginOpen ? "New to Fincognia?" : "Already have an account?"}
-          <button 
-            onClick={isLoginOpen ? openSignUp : openLogin} 
+          <button
+            onClick={isLoginOpen ? openSignUp : openLogin}
             className="ml-2 font-bold text-[#1E3A2F] hover:underline"
           >
             {isLoginOpen ? "Sign Up" : "Log In"}

@@ -109,13 +109,12 @@ const FincogniaLandingPage = () => {
             {words.map((word, i) => (
               <span
                 key={word}
-                className={`absolute left-0 w-full text-gray-300 italic font-light transition-all duration-700 ease-in-out ${
-                  i === index
+                className={`absolute left-0 w-full text-gray-300 italic font-light transition-all duration-700 ease-in-out ${i === index
                     ? "translate-y-0 opacity-100"
                     : i < index
-                    ? "-translate-y-full opacity-0"
-                    : "translate-y-full opacity-0"
-                }`}
+                      ? "-translate-y-full opacity-0"
+                      : "translate-y-full opacity-0"
+                  }`}
                 style={{ whiteSpace: "nowrap" }}
               >
                 {word}.
