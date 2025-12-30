@@ -1,4 +1,4 @@
-# Paisa Buddy - Hackxios
+# Fincognia - Hackxios
 
 A modern React application built with Vite and Tailwind CSS.
 
