@@ -11,10 +11,16 @@
     "dependencies": {
         "@react-three/drei": "^9.108.3",
         "@react-three/fiber": "^8.16.8",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
         "firebase": "^12.7.0",
+        "lucide-react": "^0.562.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-router-dom": "^7.11.0",
+        "recharts": "^2.15.4",
+        "tailwind-merge": "^3.4.0",
+        "tailwindcss-animate": "^1.0.7",
         "three": "^0.169.0",
         "zustand": "^5.0.9"
     },

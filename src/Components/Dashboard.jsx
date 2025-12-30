@@ -1,5 +1,6 @@
 import React from 'react';
 import useAuthStore from '../store/useAuthStore';
+import { ForecastChart } from './dashbord/ForcastChart';
 
 
 const Dashboard = () => {
@@ -63,6 +64,8 @@ const Dashboard = () => {
                         </div>
                     ))}
                 </div>
+
+                <ForecastChart />
             </main>
         </div>
     );
