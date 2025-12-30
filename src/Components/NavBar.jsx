@@ -1,10 +1,13 @@
 import React from "react";
 import useAuthStore from "../store/useAuthStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const NavBar = () => {
   const { openLogin, openSignUp, user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  if (location.pathname === '/dashboard' || location.pathname === '/agents' || location.pathname === '/policy-agent') return null;
 
   return (
     <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl h-14 bg-white/40 backdrop-blur-xl border border-[#CFE3D8]/30 rounded-full flex items-center justify-between px-8 z-50">

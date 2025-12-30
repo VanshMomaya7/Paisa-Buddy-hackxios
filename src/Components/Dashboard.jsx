@@ -1,72 +1,123 @@
 import React from 'react';
 import useAuthStore from '../store/useAuthStore';
 import { ForecastChart } from './dashbord/ForcastChart';
-
+import Sidebar from './Sidebar';
+import { Search, Bell } from 'lucide-react';
 
 const Dashboard = () => {
     const { user } = useAuthStore();
 
     return (
-        <div className="min-h-screen bg-[#FAFAF7] text-[#1E3A2F] p-8 pt-32">
-            {/* Main Content Area */}
+        <div className="min-h-screen bg-[#FAFAF7] text-[#1E3A2F]">
+            <Sidebar />
 
-            {/* Main Content Area */}
-            <main className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Welcome Card */}
-                <div className="md:col-span-2 bg-[#1E3A2F] text-white rounded-[32px] p-10 flex flex-col justify-between min-h-[300px]">
-                    <div>
-                        <div className="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-300 text-[10px] font-bold uppercase tracking-widest rounded-lg mb-4">
-                            Live Status
-                        </div>
-                        <h1 className="text-4xl font-bold mb-4">
-                            Welcome back, <br />
-                            <span className="text-emerald-400">{user?.displayName || user?.email?.split('@')[0] || "Trader"}</span>
-                        </h1>
-                        <p className="text-white/60 max-w-md">
-                            Your autonomous financial agent is currently monitoring 12 liquidity streams. No immediate risks detected.
-                        </p>
-                    </div>
+            {/* Main Content Wrapper - Offset by Sidebar width */}
+            <div className="md:ml-64 p-8 pt-6 transition-all duration-300">
+                {/* Header */}
+                <header className="flex justify-between items-center mb-8">
+                    <h2 className="text-2xl font-bold">Dashboard</h2>
 
-                    <div className="mt-8 flex gap-4">
-                        <div className="flex flex-col">
-                            <span className="text-[10px] uppercase tracking-widest opacity-50">Cashflow</span>
-                            <span className="text-2xl font-mono">₹1,24,000</span>
+                    <div className="flex items-center gap-4">
+                        {/* Search Bar */}
+                        <div className="relative hidden md:block">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                            <input
+                                type="text"
+                                placeholder="Search"
+                                className="pl-10 pr-4 py-2 rounded-xl border border-[#CFE3D8] bg-white text-sm focus:outline-none focus:ring-1 focus:ring-[#1E3A2F] w-64"
+                            />
                         </div>
-                        <div className="w-[1px] h-full bg-white/10" />
-                        <div className="flex flex-col">
-                            <span className="text-[10px] uppercase tracking-widest opacity-50">Burn Rate</span>
-                            <span className="text-2xl font-mono text-emerald-400">-₹12,400</span>
+
+                        <button className="p-2 rounded-xl border border-[#CFE3D8] bg-white text-gray-500 hover:text-[#1E3A2F]">
+                            <Bell size={18} />
+                        </button>
+
+                        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-[#1E3A2F] text-xs font-bold ring-2 ring-white">
+                            {user?.email?.[0].toUpperCase() || 'U'}
                         </div>
                     </div>
-                </div>
+                </header>
 
-                {/* Action Card */}
-                <div className="bg-white border border-[#CFE3D8] rounded-[32px] p-8 flex flex-col justify-between">
-                    <div>
-                        <div className="w-12 h-12 bg-[#E6EFEA] rounded-2xl flex items-center justify-center text-xl mb-6">
-                            ⚡
+                {/* Main Content Area */}
+                <main className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                    {/* ROW 1: LIVE STATUS CARD */}
+                    <div className="md:col-span-3 bg-[#1E3A2F] text-white rounded-[32px] p-10 flex flex-col md:flex-row justify-between items-center min-h-[220px] shadow-2xl shadow-emerald-900/20">
+                        <div className="flex-1 w-full md:w-auto mb-6 md:mb-0">
+                            <div className="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-300 text-[10px] font-bold uppercase tracking-widest rounded-lg mb-4 animate-pulse">
+                                Live Status
+                            </div>
+                            <h1 className="text-4xl font-bold mb-2">
+                                Welcome back, <span className="text-emerald-400">{user?.displayName || user?.email?.split('@')[0] || "Trader"}</span>
+                            </h1>
+                            <p className="text-white/60 text-sm max-w-lg">
+                                Your autonomous financial agent is monitoring 12 liquidity streams. No immediate risks detected in your cashflow.
+                            </p>
                         </div>
-                        <h3 className="text-xl font-bold mb-2">Your Actions</h3>
-                        <p className="text-gray-500 text-sm">Approvals pending for automated buffer transfers.</p>
+
+                        <div className="flex gap-8 border-t md:border-t-0 md:border-l border-white/10 pt-6 md:pt-0 md:pl-10 w-full md:w-auto justify-between md:justify-start">
+                            <div className="flex flex-col">
+                                <span className="text-[10px] uppercase tracking-widest opacity-50 mb-1">Cashflow</span>
+                                <span className="text-3xl font-mono font-light">₹1,24,000</span>
+                            </div>
+                            <div className="w-[1px] h-12 bg-white/10 hidden md:block" />
+                            <div className="flex flex-col">
+                                <span className="text-[10px] uppercase tracking-widest opacity-50 mb-1">Savings</span>
+                                <span className="text-3xl font-mono font-light text-emerald-400">₹12,400</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <button className="w-full mt-8 bg-[#FAFAF7] border border-[#CFE3D8] py-3 rounded-xl text-xs font-bold hover:bg-[#E6EFEA] transition-colors">
-                        View 3 Pending Actions
-                    </button>
-                </div>
+                    {/* ROW 2: CHART (Left) & SIDE WIDGETS (Right) */}
 
-                {/* Stats Grid */}
-                <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                    {['Liquidity Score', 'Debt Shield', 'Savings Rate', 'Credit Health'].map((item) => (
-                        <div key={item} className="bg-white border border-[#CFE3D8] p-6 rounded-[24px]">
-                            <h4 className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2">{item}</h4>
-                            <div className="text-2xl font-mono font-bold text-[#1E3A2F]">98/100</div>
+                    {/* LEFT: CHART */}
+                    <div className="md:col-span-2">
+                        <ForecastChart />
+                    </div>
+
+                    {/* RIGHT: PLACEHOLDERS */}
+                    <div className="md:col-span-1 space-y-6">
+                        {/* Placeholder: Bank Accounts */}
+                        <div className="bg-white border border-[#CFE3D8] rounded-[32px] p-6 h-[200px] flex flex-col justify-center items-center text-center shadow-lg hover:shadow-xl transition-all">
+                            <div className="w-12 h-12 bg-[#E6EFEA] rounded-full flex items-center justify-center text-2xl mb-3">
+                                🏦
+                            </div>
+                            <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Bank Accounts Placeholder</span>
                         </div>
-                    ))}
-                </div>
 
-                <ForecastChart />
-            </main>
+                        {/* Placeholder: Savings Plan */}
+                        <div className="bg-white border border-[#CFE3D8] rounded-[32px] p-6 h-[200px] flex flex-col justify-center items-center text-center shadow-lg hover:shadow-xl transition-all">
+                            <div className="w-12 h-12 bg-[#E6EFEA] rounded-full flex items-center justify-center text-2xl mb-3">
+                                🌱
+                            </div>
+                            <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Savings Plan Placeholder</span>
+                        </div>
+                    </div>
+
+                    {/* ROW 3: RECENT TRANSACTION PLACEHOLDER */}
+                    <div className="md:col-span-3 bg-white border border-[#CFE3D8] rounded-[32px] p-8 min-h-[300px] shadow-lg">
+                        <div className="flex justify-between items-center mb-8">
+                            <h3 className="text-xl font-bold text-[#1E3A2F]">Recent Transactions</h3>
+                            <button className="text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-[#1E3A2F] transition-colors">Filter</button>
+                        </div>
+
+                        {/* Table Placeholder */}
+                        <div className="space-y-4">
+                            {[1, 2, 3].map((i) => (
+                                <div key={i} className="flex items-center justify-between p-4 bg-[#FAFAF7] rounded-2xl border border-dashed border-[#CFE3D8]">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-300">#</div>
+                                        <div className="w-32 h-4 bg-[#CFE3D8]/30 rounded-full animate-pulse" />
+                                    </div>
+                                    <div className="w-24 h-4 bg-[#CFE3D8]/30 rounded-full animate-pulse hidden md:block" />
+                                    <div className="w-16 h-4 bg-[#CFE3D8]/30 rounded-full animate-pulse" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                </main>
+            </div>
         </div>
     );
 };
